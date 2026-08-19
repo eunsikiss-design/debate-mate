@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import type { Topic } from '../../types';
 import { OreoBuilder } from '../ModeA/OreoBuilder';
 import { ConceptHighlighter } from '../ModeA/ConceptHighlighter';
-import { Dumbbell, FileText, SearchCheck, Flag, Lightbulb, Mic, Table, ArrowLeft, CheckCircle2, Sparkles, BookOpen } from 'lucide-react';
+import { Dumbbell, FileText, SearchCheck, Flag, Lightbulb, Mic, Table, ArrowLeft, BookOpen } from 'lucide-react';
 import rubricsData from '../../data/rubrics.json';
-import { SpeechService, speechService } from '../../services/speechService';
+import { SpeechService } from '../../services/speechService';
 
 interface PrepRoomsMainProps {
   selectedTopic: Topic;
@@ -101,7 +101,7 @@ export const PrepRoomsMain: React.FC<PrepRoomsMainProps> = ({ selectedTopic, onS
 
   const handleCheckSpeech = () => {
     if (!speechText.trim()) return;
-    const wpm = SpeechService.calculateWPM(speechText, 30); // test 30-sec speech
+    const wpm = SpeechService.calculateWPM(speechText, 30);
     const filler = SpeechService.detectFillerWords(speechText);
     setSpeechMetrics({ wpm, fillerCount: filler.count, words: filler.words });
   };
@@ -116,7 +116,6 @@ export const PrepRoomsMain: React.FC<PrepRoomsMainProps> = ({ selectedTopic, onS
             <span>1. 토론 준비 연습실 (Debate Prep Practice Rooms)</span>
           </div>
 
-          {/* Topic Switcher */}
           <div className="flex items-center gap-2">
             <span className="text-xs text-slate-400">선택 논제:</span>
             <select
@@ -143,7 +142,6 @@ export const PrepRoomsMain: React.FC<PrepRoomsMainProps> = ({ selectedTopic, onS
         </div>
       </div>
 
-      {/* Grid of 6 Prep Rooms (if none selected) */}
       {!activeRoom ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {rooms.map((room) => {
@@ -153,7 +151,7 @@ export const PrepRoomsMain: React.FC<PrepRoomsMainProps> = ({ selectedTopic, onS
               <div
                 key={room.id}
                 onClick={() => setActiveRoom(room.id)}
-                className={`bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 cursor-pointer transition-all hover:shadow-xl space-y-3 flex flex-col justify-between group`}
+                className="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 cursor-pointer transition-all hover:shadow-xl space-y-3 flex flex-col justify-between group"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">

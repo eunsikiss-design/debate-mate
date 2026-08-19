@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { SavedEvaluationRecord, DebateFlowStep } from '../../types';
 import { StorageService } from '../../services/storageService';
-import { FolderKanban, FileText, Table, GitCommit, Award, Volume2, Copy, Download, Trash2, CheckCircle2, ArrowRight } from 'lucide-react';
+import { FolderKanban, FileText, Table, GitCommit, Award, Volume2, Copy, Download, CheckCircle2 } from 'lucide-react';
 
 interface ArchiveMainProps {
   highlightRecordId?: string | null;

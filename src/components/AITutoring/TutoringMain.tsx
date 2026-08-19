@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import type { Topic, ChatMessage } from '../../types';
-import { Bot, MessageSquare, HelpCircle, RefreshCcw, Sparkles, BookOpen, Send, ArrowLeft, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
+import { Bot, MessageSquare, HelpCircle, RefreshCcw, Sparkles, BookOpen, Send, ArrowLeft } from 'lucide-react';
 import rubricsData from '../../data/rubrics.json';
 import { GeminiService } from '../../services/geminiService';
-import { speechService, SpeechService } from '../../services/speechService';
+import { speechService } from '../../services/speechService';
 
 interface TutoringMainProps {
   selectedTopic: Topic;
@@ -19,7 +19,6 @@ export const TutoringMain: React.FC<TutoringMainProps> = ({ selectedTopic, onSel
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
 
   const modules = [
     {

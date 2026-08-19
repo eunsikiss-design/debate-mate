@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import type { Topic, DebateOptions, RubricResult, ChatMessage, DebateFlowStep } from '../../types';
-import { Swords, Settings2, Mic, FileText, Clock, Sparkles, Send, Volume2, Gauge, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Swords, Settings2, Mic, FileText, Clock, Send } from 'lucide-react';
 import rubricsData from '../../data/rubrics.json';
 import { GeminiService } from '../../services/geminiService';
 import { speechService, SpeechService } from '../../services/speechService';
 import { StorageService } from '../../services/storageService';
 import { ConceptHighlighter } from '../ModeA/ConceptHighlighter';
-import { AudioRecorderUI } from '../ModeB/AudioRecorderUI';
 
 interface DebateArenaMainProps {
   selectedTopic: Topic;
@@ -21,7 +20,6 @@ export const DebateArenaMain: React.FC<DebateArenaMainProps> = ({
 }) => {
   const topics: Topic[] = rubricsData.topics as Topic[];
 
-  // Options State
   const [options, setOptions] = useState<DebateOptions>({
     model: 'one_on_one',
     type: 'speech',
@@ -95,7 +93,6 @@ export const DebateArenaMain: React.FC<DebateArenaMainProps> = ({
 
       setMessages(prev => [...prev, aiMsg]);
 
-      // Update Flow Diagram steps
       const newStep: DebateFlowStep = {
         stepIndex: flowSteps.length + 1,
         speaker: 'AI 토론자',
