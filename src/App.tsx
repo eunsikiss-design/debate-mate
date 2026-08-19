@@ -3,32 +3,24 @@ import type { Topic } from './types';
 import { Header } from './components/Header';
 import { SettingsModal } from './components/SettingsModal';
 import { GeneralRubricModal } from './components/GeneralRubricModal';
-import { TopicSelector } from './components/TopicSelector';
-import { SpeechCoach } from './components/ModeA/SpeechCoach';
-import { AudioRecorderUI } from './components/ModeB/AudioRecorderUI';
-import { DashboardUI } from './components/TeacherDashboard/DashboardUI';
-
-type ActiveView = 'home' | 'modeA' | 'modeB' | 'dashboard';
+import { NavigationTabs, MainTabType } from './components/NavigationTabs';
+import { PrepRoomsMain } from './components/PrepRooms/PrepRoomsMain';
+import { TutoringMain } from './components/AITutoring/TutoringMain';
+import { DebateArenaMain } from './components/DebateArena/DebateArenaMain';
+import { ArchiveMain } from './components/Archive/ArchiveMain';
+import rubricsData from './data/rubrics.json';
 
 export function App() {
-  const [activeView, setActiveView] = useState<ActiveView>('home');
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const topics: Topic[] = rubricsData.topics as Topic[];
+  const [selectedTopic, setSelectedTopic] = useState<Topic>(topics[0]);
+  const [activeTab, setActiveTab] = useState<MainTabType>('prep');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isRubricOpen, setIsRubricOpen] = useState(false);
+  const [lastRecordId, setLastRecordId] = useState<string | null>(null);
 
-  const handleSelectModeA = (topic: Topic) => {
-    setSelectedTopic(topic);
-    setActiveView('modeA');
-  };
-
-  const handleSelectModeB = (topic: Topic) => {
-    setSelectedTopic(topic);
-    setActiveView('modeB');
-  };
-
-  const handleGoHome = () => {
-    setActiveView('home');
-    setSelectedTopic(null);
+  const handleCompleteDebate = (recordId: string) => {
+    setLastRecordId(recordId);
+    setActiveTab('archive');
   };
 
   return (
@@ -36,38 +28,48 @@ export function App() {
       {/* Global Header */}
       <Header
         onOpenSettings={() => setIsSettingsOpen(true)}
-        onOpenDashboard={() => setActiveView('dashboard')}
-        activeMode={activeView}
-        onGoHome={handleGoHome}
+        onOpenDashboard={() => setActiveTab('archive')}
+        activeMode={activeTab === 'archive' ? 'dashboard' : 'home'}
+        onGoHome={() => setActiveTab('prep')}
       />
 
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 animate-fade-in">
-        {activeView === 'home' && (
-          <TopicSelector
-            onSelectModeA={handleSelectModeA}
-            onSelectModeB={handleSelectModeB}
-            onOpenGeneralRubric={() => setIsRubricOpen(true)}
+        {/* Navigation Tabs */}
+        <NavigationTabs
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+
+        {/* Tab 1: 토론 준비 연습실 */}
+        {activeTab === 'prep' && (
+          <PrepRoomsMain
+            selectedTopic={selectedTopic}
+            onSelectTopic={setSelectedTopic}
           />
         )}
 
-        {activeView === 'modeA' && selectedTopic && (
-          <SpeechCoach
-            topic={selectedTopic}
-            onBack={handleGoHome}
+        {/* Tab 2: AI 튜터링 */}
+        {activeTab === 'tutoring' && (
+          <TutoringMain
+            selectedTopic={selectedTopic}
+            onSelectTopic={setSelectedTopic}
           />
         )}
 
-        {activeView === 'modeB' && selectedTopic && (
-          <AudioRecorderUI
-            topic={selectedTopic}
-            onBack={handleGoHome}
+        {/* Tab 3: AI와 토론하기 */}
+        {activeTab === 'arena' && (
+          <DebateArenaMain
+            selectedTopic={selectedTopic}
+            onSelectTopic={setSelectedTopic}
+            onCompleteDebate={handleCompleteDebate}
           />
         )}
 
-        {activeView === 'dashboard' && (
-          <DashboardUI
-            onBack={handleGoHome}
+        {/* Tab 4: 기록실 */}
+        {activeTab === 'archive' && (
+          <ArchiveMain
+            highlightRecordId={lastRecordId}
           />
         )}
       </main>
